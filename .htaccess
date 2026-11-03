@@ -1,0 +1,25 @@
+# JEMmerific EMS - Apache / Hostinger Production Configuration
+
+# 1. Prevent Directory Index Browsing
+Options -Indexes
+
+# 2. Block direct HTTP access to sensitive config & source files
+<FilesMatch "^(ai_settings\.json|\.env|\.git|composer\.json|\.gitignore)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order deny,allow
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# 3. Security: Prevent PHP execution inside uploads folder
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^uploads/.*\.php$ - [F,L,NC]
+</IfModule>
+
+# 4. Character Encoding
+AddDefaultCharset UTF-8
+
